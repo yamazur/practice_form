@@ -4,19 +4,20 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from pages.locators import RegisterPageLocators
 
-
 class BasePage:
-    def __init__(self, browser, url):
+
+    URL = "https://demoqa.com/automation-practice-form"
+
+    def __init__(self, browser):
         self.browser = browser
-        self.url = url
 
     #открываем нужную страницу в браузере
     def open(self):
-        self.browser.get(self.url)
+        self.browser.get(self.URL)
 
     #проверяем, что мы на нужной нам странице
     def should_be_correct_url(self):
-        assert self.browser.current_url == self.url
+        assert self.browser.current_url == self.URL
 
     #ожидание появления элемента
     def wait_for_element(self, locator, timeout=5):
