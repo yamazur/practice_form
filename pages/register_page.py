@@ -1,85 +1,92 @@
-from selenium.common import NoSuchElementException
-
-from pages.base_page import BasePage
-from pages.locators import RegisterPageLocators
-
+from .base_page import BasePage
+from .locators import RegisterPageLocators
 
 class RegisterPage(BasePage):
 
-    #проверяем, что заголовок страницы (title) соответствует ожидаемому значению
+    # проверка заголовка
     def should_be_correct_title(self):
-        expected_title = "Student Registration Form"
-        actual_title = self.is_element_present(*RegisterPageLocators.TITLE)
-        assert expected_title == actual_title.text, "Title was not correct"
+        expected_title = "Practice Form"
+        actual_title = self.wait_for_element(RegisterPageLocators.TITLE).text
+        assert actual_title == expected_title, \
+            f"Заголовок формы некорректен. Ожидалось: '{expected_title}', Получено: '{actual_title}'"
 
-    #проверяем наличие формы
-    def should_be_user_form(self):
-        assert self.wait_for_element(*RegisterPageLocators.USER_FORM), "User form was not found"
+    # ждем появления элементов
+    def should_be_elements_present(self, *locators):
+        for locator in locators:
+            element = self.wait_for_element(locator)
+            assert element is not None, f"Element {locator} is missing"
 
-    #проверяем наличие всех элементов формы
-    def should_be_login_form(self):
-        #проверка основных полей ввода
-        assert self.is_element_present(*RegisterPageLocators.FIRST_NAME), "First name field is missing"
-        assert self.is_element_present(*RegisterPageLocators.LAST_NAME), "Last name field is missing"
-        assert self.is_element_present(*RegisterPageLocators.EMAIL), "Email field is missing"
-        assert self.is_element_present(*RegisterPageLocators.MOBILE_NUMBER), "Mobile number field is missing"
-        assert self.is_element_present(*RegisterPageLocators.DATE_OF_BIRTH), "Date of birth field is missing"
-        assert self.is_element_present(*RegisterPageLocators.SUBJECTS), "Subjects field is missing"
-        assert self.is_element_present(*RegisterPageLocators.CURRENT_ADDRESS), "Current address field is missing"
-        assert self.is_element_present(*RegisterPageLocators.PICTURE), "Picture upload field is missing"
+    # проверка всех элементов формы
+    def should_be_elements_in_login_form(self):
+        #ждем появление формы
+        self.wait_for_element(RegisterPageLocators.USER_FORM)
 
-        #проверка радио-кнопок Gender
-        assert self.is_element_present(*RegisterPageLocators.GENDER_MALE), "Gender Male radio button is missing"
-        assert self.is_element_present(*RegisterPageLocators.GENDER_FEMALE), "Gender Female radio button is missing"
-        assert self.is_element_present(*RegisterPageLocators.GENDER_OTHER), "Gender Other radio button is missing"
+        # основные поля ввода
+        self.should_be_elements_present(
+            RegisterPageLocators.FIRST_NAME,
+            RegisterPageLocators.LAST_NAME,
+            RegisterPageLocators.EMAIL,
+            RegisterPageLocators.MOBILE_NUMBER,
+            RegisterPageLocators.DATE_OF_BIRTH,
+            RegisterPageLocators.SUBJECTS,
+            RegisterPageLocators.CURRENT_ADDRESS,
+            RegisterPageLocators.PICTURE
+        )
 
-        #проверка лейблов Gender
-        assert self.is_element_present(*RegisterPageLocators.GENDER_LABEL_MALE), "Gender Male label is missing"
-        assert self.is_element_present(*RegisterPageLocators.GENDER_LABEL_FEMALE), "Gender Female label is missing"
-        assert self.is_element_present(*RegisterPageLocators.GENDER_LABEL_OTHER), "Gender Other label is missing"
+        #гендер
+        self.should_be_elements_present(
+            RegisterPageLocators.GENDER,
+        )
 
-        #проверка чекбоксов Hobbies
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_SPORTS), "Hobbies Sports checkbox is missing"
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_READING), "Hobbies Reading checkbox is missing"
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_MUSIC), "Hobbies Music checkbox is missing"
+        #хобби
+        self.should_be_elements_present(
+            RegisterPageLocators.HOBBIES,
+        )
 
-        #проверка лейблов Hobbies
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_LABEL_SPORTS), "Hobbies Sports label is missing"
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_LABEL_READING), "Hobbies Reading label is missing"
-        assert self.is_element_present(*RegisterPageLocators.HOBBIES_LABEL_MUSIC), "Hobbies Music label is missing"
+        # State & City
+        self.should_be_elements_present(
+            RegisterPageLocators.STATE_DROPDOWN,
+            RegisterPageLocators.STATE_INPUT,
+            RegisterPageLocators.CITY_DROPDOWN,
+            RegisterPageLocators.CITY_INPUT
+        )
 
-        #проверка выпадающих списков State & City
-        assert self.is_element_present(*RegisterPageLocators.STATE_DROPDOWN), "State dropdown container is missing"
-        assert self.is_element_present(*RegisterPageLocators.STATE_INPUT), "State input field is missing"
-        assert self.is_element_present(*RegisterPageLocators.CITY_DROPDOWN), "City dropdown container is missing"
-        assert self.is_element_present(*RegisterPageLocators.CITY_INPUT), "City input field is missing"
+        # кнопка отправки
+        self.should_be_elements_present(RegisterPageLocators.SUBMIT_BUTTON)
 
-        #проверка кнопки отправки
-        assert self.is_element_present(*RegisterPageLocators.SUBMIT_BUTTON), "Submit button is missing"
-
-        #проверка лейблов (текстовых меток)
-        assert self.is_element_present(*RegisterPageLocators.LABEL_NAME), "Name label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_EMAIL), "Email label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_MOBILE), "Mobile label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_DATE), "Date of birth label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_SUBJECTS), "Subjects label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_ADDRESS), "Address label is missing"
-        assert self.is_element_present(*RegisterPageLocators.LABEL_STATE_CITY), "State and City label is missing"
+        # лейблы формы
+        self.should_be_elements_present(
+            RegisterPageLocators.LABEL_NAME,
+            RegisterPageLocators.LABEL_EMAIL,
+            RegisterPageLocators.LABEL_MOBILE,
+            RegisterPageLocators.LABEL_DATE,
+            RegisterPageLocators.LABEL_SUBJECTS,
+            RegisterPageLocators.LABEL_ADDRESS,
+            RegisterPageLocators.LABEL_STATE_CITY
+        )
 
 
-    #заполяем всю форму валидными данными
-    def valid_registration(self):
-        pass
+    # # заполяем всю форму валидными данными
+    # def valid_registration(self):
+    #     #заполняем обязательные поля
+    #     first_name_input =
+    #     last_name_input =
+    #     gender_radio_button =
+    #     mobile_number_input=
+    #
+    #     #заполняем необязательные поля
+    #     email_input=
 
-    #оставляем обязательные поля пустыми
+
+    # оставляем обязательные поля пустыми
     def empty_fields(self):
         pass
 
-    #заполняем обязательные поля пробелами
+    # заполняем обязательные поля пробелами
     def fields_filled_with_spaces(self):
         pass
 
-    #заполняем необязательные поля  валидно
+    # заполняем необязательные поля  валидно
     def valid_optional_fields(self):
         pass
 

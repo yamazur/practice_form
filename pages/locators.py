@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 
 class RegisterPageLocators:
 
-    TITLE = (By.CSS_SELECTOR, "h5.text-center")
+    TITLE = (By.CSS_SELECTOR, "h1.text-center")
     USER_FORM = (By.ID, "userForm")
 
     #основные поля ввода
@@ -15,21 +15,11 @@ class RegisterPageLocators:
     CURRENT_ADDRESS = (By.ID, "currentAddress")
     PICTURE = (By.ID, "uploadPicture")
 
-    #радио-кнопки (Gender)
-    GENDER_MALE = (By.ID, "gender-radio-1")
-    GENDER_FEMALE = (By.ID, "gender-radio-2")
-    GENDER_OTHER = (By.ID, "gender-radio-3")
-    GENDER_LABEL_MALE = (By.CSS_SELECTOR, "label[for='gender-radio-1']")
-    GENDER_LABEL_FEMALE = (By.CSS_SELECTOR, "label[for='gender-radio-2']")
-    GENDER_LABEL_OTHER = (By.CSS_SELECTOR, "label[for='gender-radio-3']")
+    #гендер
+    GENDER = (By.ID, "genterWrapper")
 
-    #чекбоксы (Hobbies)
-    HOBBIES_SPORTS = (By.ID, "hobbies-checkbox-1")
-    HOBBIES_READING = (By.ID, "hobbies-checkbox-2")
-    HOBBIES_MUSIC = (By.ID, "hobbies-checkbox-3")
-    HOBBIES_LABEL_SPORTS = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-1']")
-    HOBBIES_LABEL_READING = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-2']")
-    HOBBIES_LABEL_MUSIC = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-3']")
+    #хобби
+    HOBBIES = (By.ID, "hobbiesWrapper")
 
     #выпадающие списки (State & City)
     STATE_DROPDOWN = (By.ID, "state")  # контейнер

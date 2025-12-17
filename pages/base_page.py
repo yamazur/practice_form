@@ -1,35 +1,30 @@
-from selenium.common import TimeoutException, NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
-from pages.locators import RegisterPageLocators
+from config import DEFAULT_TIMEOUT
 
 class BasePage:
-
-    URL = "https://demoqa.com/automation-practice-form"
-
-    def __init__(self, browser):
+    def __init__(self, browser, url):
         self.browser = browser
+        self.url = url
+        self.browser.implicitly_wait(DEFAULT_TIMEOUT)
 
-    #открываем нужную страницу в браузере
+    # открыть страницу
     def open(self):
-        self.browser.get(self.URL)
+        self.browser.get(self.url)
 
-    #проверяем, что мы на нужной нам странице
+    # проверить URL
     def should_be_correct_url(self):
-        assert self.browser.current_url == self.URL
+        assert self.browser.current_url == self.url, \
+            f"Expected URL {self.url}, but got {self.browser.current_url}"
 
-    #ожидание появления элемента
-    def wait_for_element(self, locator, timeout=5):
-        try:
-            WebDriverWait(self.browser, timeout).until(
-                EC.visibility_of_element_located(locator)
-            )
-            return True
-        except TimeoutException:
-            return False
+    # ожидание появления элемента
+    def wait_for_element(self, locator, timeout=DEFAULT_TIMEOUT):
+        return WebDriverWait(self.browser, timeout).until(
+            EC.visibility_of_element_located(locator)
+        )
 
-    #поиск элемента
+    # проверка наличия элемента
     def is_element_present(self, locator):
         try:
             self.browser.find_element(*locator)
@@ -37,20 +32,8 @@ class BasePage:
         except NoSuchElementException:
             return False
 
-    #ожидание кликабельности элемента
-    def wait_for_clickable(self, locator, timeout=5):
-        try:
-            WebDriverWait(self.browser, timeout).until(
-                EC.element_to_be_clickable(locator)
-            )
-            return True
-        except TimeoutException:
-            return False
-
-
-
-
-
-
-
-
+    # ожидание кликабельного элемента
+    def wait_for_clickable(self, locator, timeout=DEFAULT_TIMEOUT):
+        return WebDriverWait(self.browser, timeout).until(
+            EC.element_to_be_clickable(locator)
+        )
