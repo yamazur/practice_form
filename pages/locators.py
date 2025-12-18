@@ -10,16 +10,21 @@ class RegisterPageLocators:
     LAST_NAME = (By.ID, "lastName")
     EMAIL = (By.ID, "userEmail")
     MOBILE_NUMBER = (By.ID, "userNumber")
-    DATE_OF_BIRTH = (By.ID, "dateOfBirthInput")
     SUBJECTS = (By.ID, "subjectsInput")
     CURRENT_ADDRESS = (By.ID, "currentAddress")
     PICTURE = (By.ID, "uploadPicture")
 
     #гендер
     GENDER = (By.ID, "genterWrapper")
+    GENDER_LABEL_MALE = (By.CSS_SELECTOR, "label[for='gender-radio-1']")
+    GENDER_LABEL_FEMALE = (By.CSS_SELECTOR, "label[for='gender-radio-2']")
+    GENDER_LABEL_OTHER = (By.CSS_SELECTOR, "label[for='gender-radio-3']")
 
     #хобби
     HOBBIES = (By.ID, "hobbiesWrapper")
+    HOBBIES_LABEL_SPORTS = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-1']")
+    HOBBIES_LABEL_READING = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-2']")
+    HOBBIES_LABEL_MUSIC = (By.CSS_SELECTOR, "label[for='hobbies-checkbox-3']")
 
     #выпадающие списки (State & City)
     STATE_DROPDOWN = (By.ID, "state")  # контейнер
@@ -41,3 +46,24 @@ class RegisterPageLocators:
     LABEL_SUBJECTS = (By.ID, "subjects-label")
     LABEL_ADDRESS = (By.ID, "currentAddress-label")
     LABEL_STATE_CITY = (By.ID, "stateCity-label")
+
+    #значения в выпадающих списках
+    ENGLISH_OPTION = (By.XPATH, "//div[contains(@class, 'option') and text()='English']")
+    NCR_OPTION = (By.XPATH, "//div[contains(@class,'option') and text()='NCR']")
+    DELHI_OPTION = (By.XPATH, "//div[contains(@class,'option') and text()='Delhi']")
+
+    #модальное окно
+    MODAL_WINDOW = (By.CSS_SELECTOR, ".modal-content")
+    MODAL_TITLE = (By.ID, "example-modal-sizes-title-lg")
+    MODAL_ROWS = (By.CSS_SELECTOR, ".table-responsive tbody tr")
+
+    #календарь
+    DATE_OF_BIRTH = (By.ID, "dateOfBirthInput")
+    MONTH_OF_BIRTH = (By.CSS_SELECTOR, ".react-datepicker__month-select")
+    YEAR_OF_BIRTH = (By.CSS_SELECTOR, ".react-datepicker__year-select")
+    DAY_OF_BIRTH = (By.XPATH, "//div[contains(@class,'react-datepicker__day') and not(contains(@class,'--outside-month')) and text()='18']")
+
+
+
+
+

@@ -2,6 +2,8 @@ import pytest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from config import DEFAULT_TIMEOUT
+
 
 @pytest.fixture
 def browser():

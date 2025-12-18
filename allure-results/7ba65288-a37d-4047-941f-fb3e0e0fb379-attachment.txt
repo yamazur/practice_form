@@ -1,3 +1,0 @@
-URL: https://demoqa.com/automation-practice-form
-Заголовок страницы: DEMOQA
-FIRST_NAME найден: firstName
