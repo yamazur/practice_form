@@ -32,13 +32,18 @@ class BasePage:
             assert element is not None, f"Element {locator} is missing"
 
     # проверяет presence элемента в DOM (не путать с visibility)
-    # отличие от wait_for_element: не ждёт, не проверяет видимость
     def is_element_present(self, locator):
         try:
             self.browser.find_element(*locator)
             return True
         except NoSuchElementException:
             return False
+
+    def is_not_element_present(self, locators, timeout=DEFAULT_TIMEOUT):  # абстрактный метод, который проверяет, что элемент не появляется на странице в течение заданного времени
+        try:
+            WebDriverWait(self.browser, timeout).until(EC.presence_of_element_located(locators))
+        except TimeoutException:
+            return True
 
     # ожидание кликабельного элемента
     def wait_for_clickable(self, locator, timeout=DEFAULT_TIMEOUT):

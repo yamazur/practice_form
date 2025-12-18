@@ -219,11 +219,11 @@ class RegisterPage(BasePage):
         submit_button.click()
 
     #проверяем наличие модального окна
-    def should_be_modal_window(self):
+    def should_be_success_message(self):
         self.browser.find_element(*RegisterPageLocators.MODAL_WINDOW)
 
     #проверяем данные в модальном окне
-    def should_be_correct_modal_data(self):
+    def should_be_correct_success_message(self):
         #находим все строки таблицы в модальном окне
         rows = self.browser.find_elements(*RegisterPageLocators.MODAL_ROWS)
 
@@ -245,6 +245,11 @@ class RegisterPage(BasePage):
             f"Получено: {modal_data}"
         )
 
+    #проверка на то, что сообщение об успехе отсутствует
+    def should_not_be_success_message(self):
+        """Проверяет, что нет сообщения об успехе"""
+        assert self.is_not_element_present(RegisterPageLocators.MODAL_WINDOW),  \
+            "Success message is presented, but should not be"
 
 
 
