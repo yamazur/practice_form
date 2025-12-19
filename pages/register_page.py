@@ -4,6 +4,7 @@ from selenium.webdriver.support.select import Select
 from .base_page import BasePage
 from .locators import RegisterPageLocators
 from faker import Faker
+import allure
 
 class RegisterPage(BasePage):
 
@@ -11,21 +12,21 @@ class RegisterPage(BasePage):
         super().__init__(browser, url)
         self.entered_data = {}
 
-    #корректное отображение страницы регистрации
+    @allure.step("Корректное отображение страницы регистрации")
     def should_be_registration_page(self):
         self.should_be_correct_url()
         self.should_be_correct_title()
         self.should_be_elements_present()
         self.should_be_elements_in_login_form()
 
-    # проверка заголовка
+    @allure.step("Проверка заголовка")
     def should_be_correct_title(self):
         expected_title = "Practice Form"
         actual_title = self.wait_for_element(RegisterPageLocators.TITLE).text
         assert actual_title == expected_title, \
             f"Заголовок формы некорректен. Ожидалось: '{expected_title}', Получено: '{actual_title}'"
 
-    # проверка всех элементов формы
+    @allure.step("Проверка всех элементов формы")
     def should_be_elements_in_login_form(self):
         #ждем появление формы
         self.wait_for_element(RegisterPageLocators.USER_FORM)
@@ -77,7 +78,7 @@ class RegisterPage(BasePage):
             RegisterPageLocators.LABEL_STATE_CITY
         )
 
-    #взаимодействие с календарем
+    @allure.step("Взвимодействие с календарем")
     def select_date_of_birth(self, day, month, year):
         #кликаем на календарь
         date_of_birth = self.browser.find_element(*RegisterPageLocators.DATE_OF_BIRTH)
@@ -99,17 +100,17 @@ class RegisterPage(BasePage):
         )
         day_elem.click()
 
-    # заполяем все поля валидно
+    @allure.step("Заполяем обязательные поля валидно")
     def valid_required_fields(self):
 
         fake = Faker()
 
-        #заполняем обязательные поля
         #имя
         first_name_input = self.browser.find_element(*RegisterPageLocators.FIRST_NAME)
         first_name_input.clear()
         first_name = fake.first_name()
         first_name_input.send_keys(first_name)
+
 
         #фамилия
         last_name_input = self.browser.find_element(*RegisterPageLocators.LAST_NAME)
@@ -132,6 +133,7 @@ class RegisterPage(BasePage):
         self.entered_data["Gender"] = gender
         self.entered_data["Mobile"] = mobile
 
+    @allure.step("Заполяем необязательные поля валидно")
     def valid_optional_fields(self):
 
         fake = Faker()
@@ -192,7 +194,7 @@ class RegisterPage(BasePage):
         self.entered_data["Address"] = address.replace("\n", " ")
         self.entered_data["State and City"] = "NCR Delhi"
 
-    # заполняем обязательные поля пробелами
+    @allure.step("Заполяем обязательные поля пробелами")
     def fields_filled_with_spaces(self):
         #имя
         first_name_input = self.browser.find_element(*RegisterPageLocators.FIRST_NAME)
@@ -213,16 +215,16 @@ class RegisterPage(BasePage):
         mobile_number_input.clear()
         mobile_number_input.send_keys("          ")
 
-    # нажимаем на кнопку submit
+    @allure.step("Нажимаем кнопку submit")
     def click_submit_button(self):
         submit_button = self.browser.find_element(*RegisterPageLocators.SUBMIT_BUTTON)
         submit_button.click()
 
-    #проверяем наличие модального окна
+    @allure.step("Проверяем наличие модального окна")
     def should_be_success_message(self):
         self.browser.find_element(*RegisterPageLocators.MODAL_WINDOW)
 
-    #проверяем данные в модальном окне
+    @allure.step("Сравниваем данные из модального окна с введенными")
     def should_be_correct_success_message(self):
         #находим все строки таблицы в модальном окне
         rows = self.browser.find_elements(*RegisterPageLocators.MODAL_ROWS)
@@ -245,7 +247,7 @@ class RegisterPage(BasePage):
             f"Получено: {modal_data}"
         )
 
-    #проверка на то, что сообщение об успехе отсутствует
+    @allure.step("Проверяем, что сообщение об успешной регистрации отсутсвует")
     def should_not_be_success_message(self):
         """Проверяет, что нет сообщения об успехе"""
         assert self.is_not_element_present(RegisterPageLocators.MODAL_WINDOW),  \
