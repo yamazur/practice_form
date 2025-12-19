@@ -1,6 +1,5 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
-
 from .base_page import BasePage
 from .locators import RegisterPageLocators
 from faker import Faker
@@ -110,7 +109,6 @@ class RegisterPage(BasePage):
         first_name_input.clear()
         first_name = fake.first_name()
         first_name_input.send_keys(first_name)
-
 
         #фамилия
         last_name_input = self.browser.find_element(*RegisterPageLocators.LAST_NAME)
@@ -253,19 +251,8 @@ class RegisterPage(BasePage):
         assert self.is_not_element_present(RegisterPageLocators.MODAL_WINDOW),  \
             "Success message is presented, but should not be"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @allure.step("Закрываем модальое окно")
+    def modal_close(self):
+        close_button = self.wait_for_clickable(RegisterPageLocators.MODAL_CLOSE_BUTTON)
+        self.browser.execute_script("arguments[0].scrollIntoView(true);", close_button)
+        close_button.click()

@@ -56,6 +56,7 @@ class RegisterPageLocators:
     MODAL_WINDOW = (By.CSS_SELECTOR, ".modal-content")
     MODAL_TITLE = (By.ID, "example-modal-sizes-title-lg")
     MODAL_ROWS = (By.CSS_SELECTOR, ".table-responsive tbody tr")
+    MODAL_CLOSE_BUTTON = (By.ID, "closeLargeModal")
 
     #календарь
     DATE_OF_BIRTH = (By.ID, "dateOfBirthInput")

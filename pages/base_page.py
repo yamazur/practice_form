@@ -53,11 +53,3 @@ class BasePage:
         file_path = test_file.name
         test_file.close()
         return file_path
-
-    @allure.step("Заполнение формы")
-    def fill_input(self, locator, value):
-        elem = self.browser.find_element(*locator)
-        elem.clear()
-        elem.send_keys(value)
-
-

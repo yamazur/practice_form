@@ -20,6 +20,7 @@ class TestStudentValidRegistration:
         page.click_submit_button()
         page.should_be_success_message()
         page.should_be_correct_success_message()
+        page.modal_close()
 
 @pytest.mark.negative_test
 class TestStudentInvalidRegistration:
@@ -40,13 +41,3 @@ class TestStudentInvalidRegistration:
         page.valid_optional_fields()
         page.click_submit_button()
         page.should_not_be_success_message()
-
-
-
-
-
-
-
-
-
-

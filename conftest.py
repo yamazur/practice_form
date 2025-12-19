@@ -4,7 +4,6 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from config import DEFAULT_TIMEOUT
 
-
 @pytest.fixture
 def browser():
     service = Service(ChromeDriverManager().install())
@@ -17,4 +16,3 @@ def browser():
 def wait(browser):
     from selenium.webdriver.support.ui import WebDriverWait
     return WebDriverWait(browser, DEFAULT_TIMEOUT)  #явное ожидание
-
