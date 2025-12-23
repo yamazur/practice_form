@@ -13,17 +13,18 @@ class RegisterPage(BasePage):
 
     @allure.step("Корректное отображение страницы регистрации")
     def should_be_registration_page(self):
-        self.should_be_correct_url()
-        self.should_be_correct_title()
-        self.should_be_elements_present()
+        self.is_correct_title()
+        self.is_elements_present()
         self.should_be_elements_in_login_form()
+        return self
 
     @allure.step("Проверка заголовка")
-    def should_be_correct_title(self):
+    def is_correct_title(self):
         expected_title = "Practice Form"
         actual_title = self.wait_for_element(RegisterPageLocators.TITLE).text
         assert actual_title == expected_title, \
             f"Заголовок формы некорректен. Ожидалось: '{expected_title}', Получено: '{actual_title}'"
+
 
     @allure.step("Проверка всех элементов формы")
     def should_be_elements_in_login_form(self):
@@ -31,7 +32,7 @@ class RegisterPage(BasePage):
         self.wait_for_element(RegisterPageLocators.USER_FORM)
 
         # основные поля ввода
-        self.should_be_elements_present(
+        self.is_elements_present(
             RegisterPageLocators.FIRST_NAME,
             RegisterPageLocators.LAST_NAME,
             RegisterPageLocators.EMAIL,
@@ -43,7 +44,7 @@ class RegisterPage(BasePage):
         )
 
         #гендер
-        self.should_be_elements_present(
+        self.is_elements_present(
             RegisterPageLocators.GENDER,
             RegisterPageLocators.GENDER_LABEL_MALE,
             RegisterPageLocators.GENDER_LABEL_FEMALE,
@@ -51,12 +52,12 @@ class RegisterPage(BasePage):
         )
 
         #хобби
-        self.should_be_elements_present(
+        self.is_elements_present(
             RegisterPageLocators.HOBBIES,
         )
 
         # State & City
-        self.should_be_elements_present(
+        self.is_elements_present(
             RegisterPageLocators.STATE_DROPDOWN,
             RegisterPageLocators.STATE_INPUT,
             RegisterPageLocators.CITY_DROPDOWN,
@@ -64,10 +65,10 @@ class RegisterPage(BasePage):
         )
 
         # кнопка отправки
-        self.should_be_elements_present(RegisterPageLocators.SUBMIT_BUTTON)
+        self.is_elements_present(RegisterPageLocators.SUBMIT_BUTTON)
 
         # лейблы формы
-        self.should_be_elements_present(
+        self.is_elements_present(
             RegisterPageLocators.LABEL_NAME,
             RegisterPageLocators.LABEL_EMAIL,
             RegisterPageLocators.LABEL_MOBILE,
@@ -76,12 +77,12 @@ class RegisterPage(BasePage):
             RegisterPageLocators.LABEL_ADDRESS,
             RegisterPageLocators.LABEL_STATE_CITY
         )
+        return self
 
     @allure.step("Взвимодействие с календарем")
     def select_date_of_birth(self, day, month, year):
         #кликаем на календарь
-        date_of_birth = self.browser.find_element(*RegisterPageLocators.DATE_OF_BIRTH)
-        date_of_birth.click()
+        self.click(RegisterPageLocators.DATE_OF_BIRTH)
 
         #выбираем год
         year_select = Select(self.browser.find_element(*RegisterPageLocators.YEAR_OF_BIRTH))
@@ -97,10 +98,11 @@ class RegisterPage(BasePage):
             f"//div[contains(@class,'react-datepicker__day') "
             f"and not(contains(@class,'--outside-month')) and text()='{day}']"
         )
-        day_elem.click()
+        self.click(day_elem)
+        return self
 
     @allure.step("Заполяем обязательные поля валидно")
-    def valid_required_fields(self):
+    def fill_valid_required(self):
 
         fake = Faker()
 
@@ -118,8 +120,7 @@ class RegisterPage(BasePage):
 
         #гендер
         gender = "Male"
-        gender_radio_button = self.browser.find_element(*RegisterPageLocators.GENDER_LABEL_MALE)
-        gender_radio_button.click()
+        self.click(RegisterPageLocators.GENDER_LABEL_MALE)
 
         #мобильный телефон
         mobile = "1234567890"
@@ -130,9 +131,10 @@ class RegisterPage(BasePage):
         self.entered_data["Student Name"] = f"{first_name} {last_name}"
         self.entered_data["Gender"] = gender
         self.entered_data["Mobile"] = mobile
+        return self
 
     @allure.step("Заполяем необязательные поля валидно")
-    def valid_optional_fields(self):
+    def fill_valid_optional(self):
 
         fake = Faker()
 
@@ -153,12 +155,10 @@ class RegisterPage(BasePage):
         #предмет
         subjects_input = self.browser.find_element(*RegisterPageLocators.SUBJECTS)
         subjects_input.send_keys("Eng")
-        english_option = self.browser.find_element(*RegisterPageLocators.ENGLISH_OPTION)
-        english_option.click()
+        self.click(RegisterPageLocators.ENGLISH_OPTION)
 
         #хобби
-        hobbies_checkbox = self.browser.find_element(*RegisterPageLocators.HOBBIES_LABEL_SPORTS)
-        hobbies_checkbox.click()
+        self.click(RegisterPageLocators.HOBBIES_LABEL_SPORTS)
 
         #фото
         file_path = self.create_test_picture()
@@ -172,16 +172,12 @@ class RegisterPage(BasePage):
         current_address_input.send_keys(address)
 
         #штат
-        state_dropdown = self.browser.find_element(*RegisterPageLocators.STATE_DROPDOWN)
-        state_dropdown.click()
-        ncr_option = self.browser.find_element(*RegisterPageLocators.NCR_OPTION)
-        ncr_option.click()
+        self.click(RegisterPageLocators.STATE_DROPDOWN)
+        self.click(RegisterPageLocators.NCR_OPTION)
 
         #город
-        city_dropdown = self.browser.find_element(*RegisterPageLocators.CITY_DROPDOWN)
-        city_dropdown.click()
-        delhi_option = self.browser.find_element(*RegisterPageLocators.DELHI_OPTION)
-        delhi_option.click()
+        self.click(RegisterPageLocators.CITY_DROPDOWN)
+        self.click(RegisterPageLocators.DELHI_OPTION)
 
         #сохраняем данные в словарь entered_data
         self.entered_data["Student Email"] = email
@@ -191,9 +187,10 @@ class RegisterPage(BasePage):
         self.entered_data["Picture"] = file_path.split("/")[-1]
         self.entered_data["Address"] = address.replace("\n", " ")
         self.entered_data["State and City"] = "NCR Delhi"
+        return self
 
     @allure.step("Заполяем обязательные поля пробелами")
-    def fields_filled_with_spaces(self):
+    def fill_required_with_spaces(self):
         #имя
         first_name_input = self.browser.find_element(*RegisterPageLocators.FIRST_NAME)
         first_name_input.clear()
@@ -205,22 +202,23 @@ class RegisterPage(BasePage):
         last_name_input.send_keys(" ")
 
         #гендер
-        gender_radio_button = self.browser.find_element(*RegisterPageLocators.GENDER_LABEL_MALE)
-        gender_radio_button.click()
+        self.click(RegisterPageLocators.GENDER_LABEL_MALE)
 
         #мобильный телефон
         mobile_number_input = self.browser.find_element(*RegisterPageLocators.MOBILE_NUMBER)
         mobile_number_input.clear()
         mobile_number_input.send_keys("          ")
+        return self
 
     @allure.step("Нажимаем кнопку submit")
     def click_submit_button(self):
-        submit_button = self.browser.find_element(*RegisterPageLocators.SUBMIT_BUTTON)
-        submit_button.click()
+        self.click(RegisterPageLocators.SUBMIT_BUTTON)
+        return self
 
     @allure.step("Проверяем наличие модального окна")
     def should_be_success_message(self):
         self.browser.find_element(*RegisterPageLocators.MODAL_WINDOW)
+        return self
 
     @allure.step("Сравниваем данные из модального окна с введенными")
     def should_be_correct_success_message(self):
@@ -253,6 +251,11 @@ class RegisterPage(BasePage):
 
     @allure.step("Закрываем модальое окно")
     def modal_close(self):
-        close_button = self.wait_for_clickable(RegisterPageLocators.MODAL_CLOSE_BUTTON)
-        self.browser.execute_script("arguments[0].scrollIntoView(true);", close_button)
-        close_button.click()
+        close_button = self.browser.find_element(*RegisterPageLocators.MODAL_CLOSE_BUTTON)
+        self.browser.execute_script(
+            "arguments[0].scrollIntoView(true);",
+            close_button
+        )
+        self.click(RegisterPageLocators.MODAL_CLOSE_BUTTON)
+        return self
+

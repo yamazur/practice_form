@@ -11,14 +11,12 @@ class BasePage:
         self.url = url
         self.browser.implicitly_wait(DEFAULT_TIMEOUT)
 
-    @allure.step("Открываем страницу")
-    def open(self):
+    @allure.step("Открываем страницу и проверяем URL")
+    def open_page_and_checking_url(self):
         self.browser.get(self.url)
-
-    @allure.step("Проверяем URL")
-    def should_be_correct_url(self):
         assert self.browser.current_url == self.url, \
             f"Expected URL {self.url}, but got {self.browser.current_url}"
+        return self
 
     @allure.step("Ожидаем появление элемента")
     def wait_for_element(self, locator, timeout=DEFAULT_TIMEOUT):
@@ -27,10 +25,11 @@ class BasePage:
         )
 
     @allure.step("Применяем ожидание элемента к каждому локатору")
-    def should_be_elements_present(self, *locators):
+    def is_elements_present(self, *locators):
         for locator in locators:
             element = self.wait_for_element(locator)
             assert element is not None, f"Element {locator} is missing"
+
 
 
     @allure.step("Проверяем отсутствие элемента")
@@ -41,10 +40,12 @@ class BasePage:
             return True
 
     @allure.step("Ожидание кликабельности элемента")
-    def wait_for_clickable(self, locator, timeout=DEFAULT_TIMEOUT):
-        return WebDriverWait(self.browser, timeout).until(
+    def click(self, locator, timeout=DEFAULT_TIMEOUT):
+        click_element =  WebDriverWait(self.browser, timeout).until(
             EC.element_to_be_clickable(locator)
         )
+        click_element.click()
+        return self
 
     @allure.step("Создаем временный файл в JPG")
     def create_test_picture(self):
@@ -53,3 +54,5 @@ class BasePage:
         file_path = test_file.name
         test_file.close()
         return file_path
+
+
