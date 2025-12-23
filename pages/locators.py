@@ -63,8 +63,3 @@ class RegisterPageLocators:
     MONTH_OF_BIRTH = (By.CSS_SELECTOR, ".react-datepicker__month-select")
     YEAR_OF_BIRTH = (By.CSS_SELECTOR, ".react-datepicker__year-select")
     DAY_OF_BIRTH = (By.XPATH, "//div[contains(@class,'react-datepicker__day') and not(contains(@class,'--outside-month')) and text()='18']")
-
-
-
-
-

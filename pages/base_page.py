@@ -6,6 +6,7 @@ import tempfile
 import allure
 
 class BasePage:
+
     def __init__(self, browser, url):
         self.browser = browser
         self.url = url
@@ -30,8 +31,6 @@ class BasePage:
             element = self.wait_for_element(locator)
             assert element is not None, f"Element {locator} is missing"
 
-
-
     @allure.step("Проверяем отсутствие элемента")
     def is_not_element_present(self, locators, timeout=DEFAULT_TIMEOUT):  # абстрактный метод, который проверяет, что элемент не появляется на странице в течение заданного времени
         try:
@@ -54,5 +53,3 @@ class BasePage:
         file_path = test_file.name
         test_file.close()
         return file_path
-
-

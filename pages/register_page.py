@@ -7,8 +7,10 @@ import allure
 
 class RegisterPage(BasePage):
 
-    def __init__(self, browser, url):
-        super().__init__(browser, url)
+    URL = "https://demoqa.com/automation-practice-form"
+
+    def __init__(self, browser):
+        super().__init__(browser, self.URL)
         self.entered_data = {}
 
     @allure.step("Корректное отображение страницы регистрации")
@@ -24,7 +26,6 @@ class RegisterPage(BasePage):
         actual_title = self.wait_for_element(RegisterPageLocators.TITLE).text
         assert actual_title == expected_title, \
             f"Заголовок формы некорректен. Ожидалось: '{expected_title}', Получено: '{actual_title}'"
-
 
     @allure.step("Проверка всех элементов формы")
     def should_be_elements_in_login_form(self):
@@ -242,6 +243,7 @@ class RegisterPage(BasePage):
             f"Ожидалось: {self.entered_data}\n"
             f"Получено: {modal_data}"
         )
+        return self
 
     @allure.step("Проверяем, что сообщение об успешной регистрации отсутсвует")
     def should_not_be_success_message(self):
@@ -258,4 +260,3 @@ class RegisterPage(BasePage):
         )
         self.click(RegisterPageLocators.MODAL_CLOSE_BUTTON)
         return self
-
